@@ -1,0 +1,184 @@
+---
+title: "Map Examples using Leaflet 20230606"
+author: "Inti Luna"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social: menu
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+library(ggplot2)
+library(plotly)
+library(plyr)
+library(flexdashboard)
+library(leaflet)
+library(leaflet.providers)
+library(tidyverse)
+library(htmlwidgets)
+library(DT)
+library(raster)
+library(crosstalk)
+
+
+```
+
+
+map:vector markers-image
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### map 
+
+```{r}
+m <- leaflet() %>%
+  addTiles() %>%  # Add default OpenStreetMap map tiles
+  addMarkers(lng=2.32081655555556, lat=41.7576773611111,label="DJI_0049.JPG", popup='<img src=".//images/DJI_0049.JPG" height="150px" width="150px"/>')%>%
+  addMarkers(lng=2.31952280555556, lat=41.7567564166667,label="DJI_0036.JPG", popup='<img src=".//images/DJI_0036.JPG" height="150px" width="150px"/>')
+  
+m  # Print the map
+```
+
+map:vector markers-audio
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### map 
+
+```{r}
+# m2 <- leaflet() %>%
+#   addTiles() %>%  # Add default OpenStreetMap map tiles
+#   addMarkers(lng=174.768, lat=-36.852, popup="The birthplace of R")
+# m  # Print the map
+
+map <- leaflet() %>%
+    # Base groups
+    addTiles(group = "OSM (default)") %>%
+    addProviderTiles(providers$Stamen.Toner, group = "Toner") %>%
+    addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite") %>%
+    addProviderTiles(providers$Esri.WorldImagery, group = "Satview") %>%
+    # Overlay groups
+    addMarkers(lng=2.32081655555556, lat=41.7576773611111,label="DJI_0049.JPG", popup='<img src=".//images/DJI_0049.JPG" height="150px" width="150px"/> <audio controls autoplay> <source src=".//audios/20120513_063742.mp3" type="audio/mpeg"> </audio>"')%>%
+    addMarkers(lng=2.31952280555556, lat=41.7567564166667,label="DJI_0036.JPG", popup='<img src=".//images/DJI_0036.JPG" height="150px" width="150px"/> <audio controls autoplay> <source src=".//audios/20120513_063915.mp3" type="audio/mpeg"> </audio>')%>%
+    
+    # Layers control
+    addLayersControl(
+      baseGroups = c("OSM (default)", "Toner", "Toner Lite","Satview"),
+      overlayGroups = c("poi"),
+      options = layersControlOptions(collapsed = FALSE)
+    )
+  # map %>% hideGroup("rios temporales")%>% 
+  #   hideGroup("ca") %>%
+  #   hideGroup("aoi") %>%
+  #   hideGroup("patrl")
+map %>%
+  addMeasure(
+    position = "bottomleft",
+    primaryLengthUnit = "meters",
+    primaryAreaUnit = "sqmeters",
+    activeColor = "#3D535D",
+    completedColor = "#7D4479")%>%
+
+  addMiniMap(
+    tiles = providers$osm,
+    toggleDisplay = TRUE)
+```
+
+map:vector-read-csv
+=======================================================================
+
+Row
+-----------------------------------------------------------------------
+
+### map 
+
+```{r}
+
+#read df
+pladf<-read.csv("df_spatial.csv",header = TRUE)
+pladf.shared <- SharedData$new(pladf)
+
+
+map2 <- leaflet() %>%
+    # Base groups
+    addTiles(group = "OSM (default)") %>%
+    addProviderTiles(providers$Stamen.Toner, group = "Toner") %>%
+    addProviderTiles(providers$Stamen.TonerLite, group = "Toner Lite") %>%
+    addProviderTiles(providers$Esri.WorldImagery, group = "Satview") %>%
+  
+    
+    
+    # Overlay groups
+    addMarkers(lng=pladf$long, lat=pladf$lat, label = pladf$label, popup=pladf$src_image_audio, group= "poi") %>%
+    # addMarkers(lng=pladf.shared$long, lat=pladf.shared$lat, label = pladf.shared$id, group= "poi") %>%
+    # addPolygons(data=admin, weight = 3, fillColor = 'green', color = 'green',fillOpacity = 0.3, group = "admin") %>%
+    # addPolygons(data=ca, weight = 3, fillColor = 'white', color = 'white',fillOpacity = 0.3,group = "ca") %>%
+    # addPolygons(data=ba,label = ~name, weight = 3, fillColor = 'yellow', color = 'red',fillOpacity = 0.3,group = "ba") %>%
+    # addPolygons(data=aoi, weight = 3, fillColor = 'brown', color = 'brown',fillOpacity = 0.3,group = "aoi") %>%
+    # addPolygons(data=patrl, label = ~name, weight = 3, fillColor = 'yellow', color = 'yellow',fillOpacity = 0.3,group = "patrl")  %>%
+    # addPolygons(data=sectores,label = ~nombre, weight = 3, fillColor = 'red', color = 'red',fillOpacity = 0.3,group = "sectores")  %>%
+    # addPolylines(data=rios_p,label = ~NOMBRE, weight = 3, fillColor = 'blue', color = 'blue',fillOpacity = 0.3,group = "rios permanentes") %>%
+    # addPolylines(data=rios_t, weight = 2, fillColor = 'blue', color = 'blue',fillOpacity = 0.1,group = "rios temporales")  %>%
+    
+    # Layers control
+    addLayersControl(
+      baseGroups = c("OSM (default)", "Toner", "Toner Lite","Satview"),
+      overlayGroups = c("poi"),
+      options = layersControlOptions(collapsed = FALSE)
+    )
+  # map %>% hideGroup("rios temporales")%>% 
+  #   hideGroup("ca") %>%
+  #   hideGroup("aoi") %>%
+  #   hideGroup("patrl")
+map2 %>%
+  addMeasure(
+    position = "bottomleft",
+    primaryLengthUnit = "meters",
+    primaryAreaUnit = "sqmeters",
+    activeColor = "#3D535D",
+    completedColor = "#7D4479")%>%
+
+  addMiniMap(
+    tiles = providers$osm,
+    toggleDisplay = TRUE)
+```
+
+### Table
+
+```{r}
+
+#read df
+# pladf<-read.csv("df_spatial.csv",header = TRUE)
+pladf
+```
+
+
+```{r eval=FALSE}
+### **Map Filters:**
+#https://www.thetidytrekker.com/post/dull-dashboards
+#<center>
+
+  filter_checkbox(
+    id = "main_specie",
+    label = "Specie Type",
+    sharedData = pladf.shared,
+    group = ~`main_specie`,
+    inline = TRUE
+  )
+
+```
+
+
+
+
+
+
+
+
+
+

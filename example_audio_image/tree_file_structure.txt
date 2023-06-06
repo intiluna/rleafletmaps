@@ -1,0 +1,28 @@
+.
+├── audios
+│   ├── 20120513_063742.mp3
+│   ├── 20120513_063915.mp3
+│   ├── 20120513_063943.mp3
+│   ├── 20120513_065142.mp3
+│   ├── 20120513_065422.mp3
+│   ├── 20120513_065511.mp3
+│   ├── 20120513_065905.mp3
+│   ├── 20120513_065929.mp3
+│   └── cadi_gossol_camping_20120513.xls
+├── dashboard_leaflet_image_audio.Rproj
+├── df_spatial.csv
+├── ejemplos_leaflet_audio_image.html
+├── ejemplos_leaflet_audio_image.Rmd
+├── file_structure.txt
+├── images
+│   ├── DJI_0001.JPG
+│   ├── DJI_0014.JPG
+│   ├── DJI_0031.JPG
+│   ├── DJI_0036.JPG
+│   ├── DJI_0040.JPG
+│   ├── DJI_0049.JPG
+│   ├── images_coordinates_decimal_exiftool.txt
+│   └── images_coordinates_exiftool.txt
+└── tree_file_structure.txt
+
+2 directories, 23 files
